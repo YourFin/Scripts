@@ -29,7 +29,7 @@ function gen_input_command () {
     # Probably want to use like:
     # eval "$(gen_input_command $@)" | my_stdin_consumer
     #
-    # Note: This function can potentially eat up Mb or two of memory
+    # Note: This function can potentially eat up a Mb or two of memory
 
     # Find how much we can read in ahead of time as the file name:
     local MAX_ARG_STRLEN=$(expr $(getconf PAGE_SIZE) \* 32) # Hard coded maximum argument string length in linux
@@ -66,7 +66,6 @@ eval "$(gen_input_command $@)" |
     sed -e 's:\":\\\":g' |
     sed -e ':a;N;$!ba;s:\n:\\n", \
 '"$INDENT_STR"'":g' |
-    head -c-1 # Remove last newline that the weirdo tag pattern matching
-              # can't deal with
+    perl -p -e 'chomp if eof'
 echo -E '"'
 echo -E ');'
