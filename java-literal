@@ -1,0 +1,52 @@
+#!/bin/bash
+# Formats text so that it can be pasted into java source in a pretty fashion,
+# in the form 'final String foo = String.join(
+#                   "line 1\n",
+#                   "line 2 with \"Quoted text\"\n",
+#              );'
+# Assumes 4 spaces for tabs
+# Two ways of taking input:
+#  String argument (i.e. $@)
+#  stdin
+# It will first check if a file under the name passed in exists; if it does,
+# that will be read in as the input. Otherwise, the input is taken literally.
+#
+# Multiple arguments are assumed to be separated with a single space.
+
+function gen_input_command () {
+    # Writes to stdout a command that, when run,
+    # will write to stdout the text to be used as input.
+    # Takes $@ as an argument
+    #
+    # Probably want to use like:
+    # eval "$(gen_input_command $@)" | my_stdin_consumer
+    #
+    # Note: This function can potentially eat up Mb or two of memory
+
+    # Find how much we can read in ahead of time as the file name:
+    local MAX_ARG_STRLEN=$(expr $(getconf PAGE_SIZE) \* 32) # Hard coded maximum argument string length in linux
+    # See: https://stackoverflow.com/questions/48014798/raise-command-line-argument-string-size-limit-arg-max-mac-osx
+    # and: https://unix.stackexchange.com/questions/120642/what-defines-the-maximum-size-for-a-command-single-argument
+    # Also note: This could potentially run into problems with multibyte character encodings
+    # as cut -c uses characters not bytes
+    local MAX_FILE_NAME=$MAX_ARG_STRLEN
+
+    if [ $# -ge 1 ] ; then # If the number of arguments >= 1
+        local command='echo "$@"'
+        # File names really shouldn't be longer than $MAX_FILE_NAME characters long
+        local chopped_input="$(eval $command | cut -c-$MAX_FILE_NAME)"
+    else
+        local chopped_input="$(cat /dev/stdin | cut -c-$MAX_FILE_NAME)"
+        # This escapes $chopped_input and prints it before the rest of stdin
+        local command="cat <(echo -n '${chopped_input@Q}') /dev/stdin"
+    fi
+    if [ -f "$chopped_input" ] ; then
+        echo "cat $chopped_input"
+    else
+        echo "$command"
+    fi
+    return 0
+}
+# Test line
+# echo "$(gen_input_command $@)"
+eval "$(gen_input_command $@)"
