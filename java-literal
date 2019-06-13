@@ -13,6 +13,14 @@
 #
 # Multiple arguments are assumed to be separated with a single space.
 
+# String to use to indent:
+# 4 spaces
+INDENT_STR="    "
+# 2 spaces
+#INDENT_STR="  "
+# A tab
+#INDENT_STR="	"
+
 function gen_input_command () {
     # Writes to stdout a command that, when run,
     # will write to stdout the text to be used as input.
@@ -49,4 +57,14 @@ function gen_input_command () {
 }
 # Test line
 # echo "$(gen_input_command $@)"
-eval "$(gen_input_command $@)"
+echo "final String foo = String.join("
+echo -n "$INDENT_STR\""
+eval "$(gen_input_command $@)" |
+    sed -e 's:\\:\\\\:g' |
+    sed -e 's:	:\\t:g' |
+    sed -e 's:\":\\\":g' |
+    sed -e ':a;N;$!ba;s:\n:\\n", \
+'"$INDENT_STR"'":g' |
+    head -c-1 # Remove last newline that the start of the pattern matching can't deal with
+echo '"'
+echo ');'
