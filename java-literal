@@ -40,31 +40,33 @@ function gen_input_command () {
     local MAX_FILE_NAME=$MAX_ARG_STRLEN
 
     if [ $# -ge 1 ] ; then # If the number of arguments >= 1
-        local command='echo "$@"'
+        local command='echo -En "$@"'
         # File names really shouldn't be longer than $MAX_FILE_NAME characters long
         local chopped_input="$(eval $command | cut -c-$MAX_FILE_NAME)"
     else
         local chopped_input="$(cat /dev/stdin | cut -c-$MAX_FILE_NAME)"
         # This escapes $chopped_input and prints it before the rest of stdin
-        local command="cat <(echo -n '${chopped_input@Q}') /dev/stdin"
+        local command="cat <(echo -n ${chopped_input@Q}) /dev/stdin"
     fi
     if [ -f "$chopped_input" ] ; then
-        echo "cat $chopped_input"
+        echo -En "cat $chopped_input"
     else
-        echo "$command"
+        echo -En "$command"
     fi
     return 0
 }
 # Test line
-# echo "$(gen_input_command $@)"
-echo "final String foo = String.join("
-echo -n "$INDENT_STR\""
+#echo -E "$(gen_input_command $@)"
+
+echo -E "final String foo = String.join("
+echo -En "$INDENT_STR\""
 eval "$(gen_input_command $@)" |
     sed -e 's:\\:\\\\:g' |
     sed -e 's:	:\\t:g' |
     sed -e 's:\":\\\":g' |
     sed -e ':a;N;$!ba;s:\n:\\n", \
 '"$INDENT_STR"'":g' |
-    head -c-1 # Remove last newline that the start of the pattern matching can't deal with
-echo '"'
-echo ');'
+    head -c-1 # Remove last newline that the weirdo tag pattern matching
+              # can't deal with
+echo -E '"'
+echo -E ');'
