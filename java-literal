@@ -59,12 +59,13 @@ function gen_input_command () {
 #echo -E "$(gen_input_command $@)"
 
 echo -E "final String foo = String.join("
+echo -E "$INDENT_STR\"\\n\","
 echo -En "$INDENT_STR\""
 eval "$(gen_input_command $@)" |
     sed -e 's:\\:\\\\:g' |
     sed -e 's:	:\\t:g' |
     sed -e 's:\":\\\":g' |
-    sed -e ':a;N;$!ba;s:\n:\\n", \
+    sed -e ':a;N;$!ba;s:\n:", \
 '"$INDENT_STR"'":g' |
     perl -p -e 'chomp if eof'
 echo -E '"'
