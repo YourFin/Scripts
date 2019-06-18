@@ -46,7 +46,7 @@ function gen_input_command () {
     else
         local chopped_input="$(cat /dev/stdin | cut -c-$MAX_FILE_NAME)"
         # This escapes $chopped_input and prints it before the rest of stdin
-        local command="cat <(echo -n ${chopped_input@Q}) /dev/stdin"
+        local command="cat <(echo -en ${chopped_input@Q}) /dev/stdin"
     fi
     if [ -f "$chopped_input" ] ; then
         echo -En "cat $chopped_input"
@@ -55,18 +55,27 @@ function gen_input_command () {
     fi
     return 0
 }
-# Test line
-#echo -E "$(gen_input_command $@)"
 
-echo -E "final String foo = String.join("
-echo -E "$INDENT_STR\"\\n\","
-echo -En "$INDENT_STR\""
-eval "$(gen_input_command $@)" |
-    sed -e 's:\\:\\\\:g' |
-    sed -e 's:	:\\t:g' |
-    sed -e 's:\":\\\":g' |
-    sed -e ':a;N;$!ba;s:\n:", \
+function print_literal() {
+    echo -E "final String foo = String.join("
+    echo -E "$INDENT_STR\"\\n\","
+    echo -En "$INDENT_STR\""
+    eval "$(gen_input_command $@)" |
+        sed -e 's:\\:\\\\:g' |
+        sed -e 's:	:\\t:g' |
+        sed -e 's:\":\\\":g' |
+        sed -e ':a;N;$!ba;s:\n:", \
 '"$INDENT_STR"'":g' |
-    perl -p -e 'chomp if eof'
-echo -E '"'
-echo -E ');'
+        perl -p -e 'chomp if eof'
+    echo -E '"'
+    echo -E ');'
+}
+
+if false ; then #type xclip &>/dev/null ; then
+    print_literal "$@" \
+        | xclip -f -selection "primary" -i \
+        | xclip -f -selection "secondary" -i \
+        | xclip -f -selection "clipboard" -i
+else
+    print_literal "$@"
+fi
