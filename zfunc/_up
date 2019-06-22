@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+up () {
+    cd "$($HOME/.local/opt/yf-scripts/helpers/find-up.sh $@)"
+}
+
+autoload -Uz up
