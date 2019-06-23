@@ -51,6 +51,9 @@ fi
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
+# Npm
+[[ -d "$HOME/.local/usr/npm/global/bin/" ]] && export PATH="$HOME/.local/usr/npm/global/bin/:$PATH"
+
 # Manually installed local stuff
 export PATH="$HOME/.local/opt/yf-scripts/bin:$PATH"
 
