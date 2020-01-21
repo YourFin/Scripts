@@ -56,6 +56,7 @@ export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
 # Manually installed local stuff
 export PATH="$HOME/.local/opt/yf-scripts/bin:$PATH"
+export PATH="$HOME/.emacs.d/bin/:$PATH"
 
 #####################
 # General functions #
@@ -148,6 +149,20 @@ function annoyTrash()
 if $(which thefuck > /dev/null 2>/dev/null) ; then
     eval "$(thefuck --alias)"
 fi
+
+################
+# OPAM (OCaml) #
+################
+
+export OPAMROOT="$HOME/.local/usr/opam"
+
+#############
+# Ruby Gems #
+#############
+
+export GEM_HOME="$HOME/.local/usr/gems"
+export GEM_PATH="$HOME/.local/usr/gems:$GEM_PATH"
+
 ############
 # Warnings #
 ############
@@ -157,3 +172,6 @@ if which rfkill >/dev/null 2>/dev/null ; then
     [ -z "$(rfkill | grep wlan | grep blocked)" ] &&
         echo "WARNING: RFkill enabled for wifi"
 fi
+
+# opam configuration
+test -r /home/pen/.local/usr/opam/opam-init/init.zsh && . /home/pen/.local/usr/opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
