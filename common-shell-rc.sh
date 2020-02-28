@@ -58,6 +58,10 @@ export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 export PATH="$HOME/.local/opt/yf-scripts/bin:$PATH"
 export PATH="$HOME/.emacs.d/bin/:$PATH"
 
+export PATH="$HOME/.yarn/bin:$PATH"
+export PATH="$PATH:$HOME/.cargo/bin"
+export PATH="$PATH:$HOME/.local/bin"
+
 #####################
 # General functions #
 #####################
@@ -155,6 +159,8 @@ fi
 ################
 
 export OPAMROOT="$HOME/.local/usr/opam"
+# opam configuration
+test -r /home/pen/.local/usr/opam/opam-init/init.zsh && . /home/pen/.local/usr/opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
 #############
 # Ruby Gems #
@@ -162,6 +168,11 @@ export OPAMROOT="$HOME/.local/usr/opam"
 
 export GEM_HOME="$HOME/.local/usr/gems"
 export GEM_PATH="$HOME/.local/usr/gems:$GEM_PATH"
+
+#######
+# Nix #
+#######
+if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
 ############
 # Warnings #
@@ -172,13 +183,3 @@ if which rfkill >/dev/null 2>/dev/null ; then
     [ -z "$(rfkill | grep wlan | grep blocked)" ] &&
         echo "WARNING: RFkill enabled for wifi"
 fi
-
-# opam configuration
-test -r /home/pen/.local/usr/opam/opam-init/init.zsh && . /home/pen/.local/usr/opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
-
-# Nix
-if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
-
-export PATH="$HOME/.yarn/bin:$PATH"
-export PATH="$PATH:$HOME/.cargo/bin"
-export PATH="$PATH:$HOME/.local/bin"
