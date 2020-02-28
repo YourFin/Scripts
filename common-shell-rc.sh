@@ -175,3 +175,7 @@ fi
 
 # opam configuration
 test -r /home/pen/.local/usr/opam/opam-init/init.zsh && . /home/pen/.local/usr/opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+
+export PATH="$HOME/.yarn/bin:$PATH"
+export PATH="$PATH:$HOME/.cargo/bin"
+export PATH="$PATH:$HOME/.local/bin"
