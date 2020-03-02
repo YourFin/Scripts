@@ -59,8 +59,8 @@ export PATH="$HOME/.local/opt/yf-scripts/bin:$PATH"
 export PATH="$HOME/.emacs.d/bin/:$PATH"
 
 export PATH="$HOME/.yarn/bin:$PATH"
-export PATH="$PATH:$HOME/.cargo/bin"
 export PATH="$PATH:$HOME/.local/bin"
+export PATH="/home/pen/.local/usr/cargo/bin:$PATH"
 
 #####################
 # General functions #
@@ -174,6 +174,13 @@ export GEM_PATH="$HOME/.local/usr/gems:$GEM_PATH"
 # Nix #
 #######
 if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
+########
+# Rust #
+########
+
+export CARGO_HOME="$HOME/.local/usr/cargo"
+export RUSTUP_HOME="$HOME/.local/usr/rustup"
 
 ############
 # Warnings #
