@@ -1,8 +1,6 @@
 ####################
 # Variable Setting #
 ####################
-#so as not to be disturbed by Ctrl-S ctrl-Q in terminals:
-stty -ixon
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
