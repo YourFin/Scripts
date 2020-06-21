@@ -184,8 +184,3 @@ export RUSTUP_HOME="$HOME/.local/usr/rustup"
 # Warnings #
 ############
 
-# Rfkill warning:
-if command -v rfkill >/dev/null 2>/dev/null ; then
-    [ -z "$(rfkill | grep wlan | grep blocked)" ] &&
-        echo "WARNING: RFkill enabled for wifi"
-fi
