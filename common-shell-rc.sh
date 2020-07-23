@@ -43,15 +43,9 @@ if type go >/dev/null 2>/dev/null ; then
 	  export PATH="$GOPATH/bin:$PATH"
 fi
 
-if command -v ruby > /dev/null 2>/dev/null ; then
-    echo 'before gem user'
-    if ruby -e 'defined?(Gem) ? exit(0) : exit(1)' ; then 
-        echo "success!"
+if command -v ruby > /dev/null 2>/dev/null \
+    && ruby -e 'defined?(Gem) ? exit(0) : exit(1)' ; then 
         export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
-    else
-        echo "failure"
-    fi
-    echo 'after gem user'
 fi
 
 # Ruby version management
