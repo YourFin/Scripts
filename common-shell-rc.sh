@@ -13,7 +13,9 @@ export HISTSIZE=1000
 export SAVEHIST=1000
 export HISTFILESIZE=1000
 
+echo "before set -o vi"
 set -o vi
+echo "after set -o vi"
 
 # Turn off damn terminal bell
 [[ "$osType" == "Linux" ]] && xset -b
@@ -42,7 +44,14 @@ if type go >/dev/null 2>/dev/null ; then
 fi
 
 if command -v ruby > /dev/null 2>/dev/null ; then
-    export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+    echo 'before gem user'
+    if ruby -e 'defined?(Gem) ? exit(0) : exit(1)' ; then 
+        echo "success!"
+        export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+    else
+        echo "failure"
+    fi
+    echo 'after gem user'
 fi
 
 # Ruby version management
